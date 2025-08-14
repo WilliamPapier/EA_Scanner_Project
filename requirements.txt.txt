@@ -2,4 +2,4 @@ MetaTrader5
 pandas
 numpy
 requests
-scikit-learn
+schedule
