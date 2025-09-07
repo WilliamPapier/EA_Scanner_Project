@@ -5,8 +5,12 @@ __pycache__/
 *.pyd
 .Python
 
-# Generated CSV files
-*.csv
+# Generated output files (but keep samples)
+model_params.csv
+news_block.csv
+
+# Test files
+test_project.py
 
 # IDE
 .vscode/
