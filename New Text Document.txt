@@ -1,8 +1,0 @@
-ea_trade_executor.mq5
-scanner.py
-infer_and_write_params.py
-news_updater.py
-scheduler.py
-model_params.json
-historical_setups.json
-requirements.txt
