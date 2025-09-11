@@ -34,6 +34,15 @@ EA_Scanner_Project/
 ├── output/                 # Generated reports and models
 ├── run_executor_with_features.py  # Main pipeline script
 ├── pipeline_config.json    # Default configuration
+├── src/                    # (Classic EA scripts, if needed)
+│   ├── __init__.py
+│   ├── scanner.py
+│   ├── infer_and_write_params.py
+│   ├── news_updater.py
+│   └── scheduler.py
+├── samples/
+│   └── model_params_sample.csv
+├── requirements.txt
 └── README.md
 ```
 
@@ -47,30 +56,29 @@ pip install pandas numpy scikit-learn
 
 ### Usage
 
-1. Ensure MetaTrader 5 is installed and running (if using EA integration).
-2. Run with sample data:
-   ```bash
-   python3 run_executor_with_features.py
-   ```
-3. Run with custom configuration:
-   ```bash
-   python3 run_executor_with_features.py --config pipeline_config.json
-   ```
-4. Enable every-bar scanning:
-   ```bash
-   python3 run_executor_with_features.py --scan-every-bar
-   ```
-5. Use high-risk mode:
-   ```bash
-   python3 run_executor_with_features.py --risk-level high
-   ```
-6. Or, run individual components (if using classic scripts):
-   ```bash
-   python scanner.py
-   python infer_and_write_params.py
-   python news_updater.py
-   python scheduler.py
-   ```
+- **ML Pipeline:**
+  1. Ensure MetaTrader 5 is installed and running (if using EA integration).
+  2. Run with sample data:
+     ```bash
+     python3 run_executor_with_features.py
+     ```
+  3. Run with custom configuration:
+     ```bash
+     python3 run_executor_with_features.py --config pipeline_config.json
+     ```
+  4. Enable every-bar scanning:
+     ```bash
+     python3 run_executor_with_features.py --scan-every-bar
+     ```
+  5. Use high-risk mode:
+     ```bash
+     python3 run_executor_with_features.py --risk-level high
+     ```
+
+- **Classic EA Scripts:**
+  1. Install dependencies: `pip install -r requirements.txt`
+  2. Configure MetaTrader 5 connection
+  3. Run the scheduler: `python src/scheduler.py`
 
 ### Configuration
 

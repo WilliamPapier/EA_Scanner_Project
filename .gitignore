@@ -1,11 +1,8 @@
-# Python artifacts
+# Python cache
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-*.py[cod]
-*$py.class
-*.so
 .Python
 
 # Build and distribution
@@ -31,12 +28,11 @@ env/
 ENV/
 .venv/
 
-# IDE and editor files
+# IDE files
 .vscode/
 .idea/
 *.swp
 *.swo
-*~
 
 # OS files
 .DS_Store
@@ -44,22 +40,11 @@ Thumbs.db
 
 # Logs
 *.log
-logs/
-trading_pipeline.log
 
-# Model files (optional - uncomment if you want to ignore these)
-# *.joblib
-# *.pkl
-
-# Output files (generated during runtime)
-trade_log.csv
+# Generated CSV/output files (but keep samples)
 model_params.csv
 news_block.csv
 historical_setups.csv
 
 # Test files
 test_project.py
-
-# Temporary files
-tmp/
-temp/
