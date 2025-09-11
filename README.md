@@ -1,5 +1,37 @@
 # EA_Scanner_Project
 
+## 🚀 NEW: End-to-End ML Trading System
+
+This project now includes a complete **modular, end-to-end scanner and machine learning system** with:
+
+- **🔍 Multi-Timeframe Scanner** (`scanner/multi_timeframe_scanner.py`): Advanced Smart Money Concepts detection including liquidity sweeps, BOS, FVG, and order blocks
+- **🤖 Dynamic ML Pipeline** (`ml/dynamic_ml_pipeline.py`): Weekly retraining, feature/label building, and timestamped model versioning  
+- **🔴 Live Trading Loop** (`live/live_scanner_ml_loop.py`): Real-time scanning with ML filtering and high-probability setup alerts
+- **📚 Architecture Documentation** (`docs/end_to_end_architecture.md`): Complete system workflow and extensibility guide
+
+### Quick Start with New System
+
+```bash
+# Run comprehensive system test
+python ea_scanner_cli.py test
+
+# Scan for trading setups
+python ea_scanner_cli.py scan
+
+# Train ML model on available data
+python ea_scanner_cli.py train
+
+# Start live trading loop
+python ea_scanner_cli.py live
+
+# Check system status
+python ea_scanner_cli.py status
+```
+
+---
+
+# EA_Scanner_Project
+
 Fully automated EA + Python Scanner for High-probability trading setups
 
 ## Universal ML-Driven Multi-Timeframe Trading Pipeline
