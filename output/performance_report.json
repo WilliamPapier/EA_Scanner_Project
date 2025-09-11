@@ -1,0 +1,13 @@
+{
+  "total_trades": 5,
+  "winning_trades": 2,
+  "losing_trades": 3,
+  "win_rate": 40.0,
+  "total_profit": -6860.402244045943,
+  "average_profit": -1372.0804488091885,
+  "max_profit": 37.56719500000827,
+  "max_loss": -3551.8515355927607,
+  "profit_factor": 0.009788052778564262,
+  "current_balance": 3139.5977559540574,
+  "total_return": -68.60402244045943
+}
