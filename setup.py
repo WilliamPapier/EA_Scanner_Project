@@ -10,7 +10,7 @@ import subprocess
 def install_dependencies():
     """Install required Python packages"""
     print("Installing dependencies...")
-    subprocess.run([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
+    subprocess.run([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"], check=True)
 
 def run_scanner():
     """Run the EA Scanner"""
