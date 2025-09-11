@@ -1,2 +1,0 @@
-symbol,direction,entry,sl,tp,risk_reward,setup_type,time,hot_zone,ml_confidence,atr_value,sl_distance,tp_distance,risk_multiplier,execution_status,timestamp
-EURUSD_SAMPLE,short,1.10171,1.10697,1.09382,1.5,EMA_Crossover_Bearish,00:00:00,True,0.857,0.00219,0.00526,0.00789,1.2,approved_high_confidence,2025-09-11T14:36:27.510557
