@@ -1,0 +1,57 @@
+{
+  "scan_interval_seconds": 300,
+  "data_source": "csv",
+  "data_directory": "data",
+  "output_directory": "output/live",
+  "model_dir": "models",
+  "confidence_threshold": 0.75,
+  "confluence_threshold": 0.6,
+  "symbols": [
+    "EURUSD",
+    "GBPUSD", 
+    "USDJPY",
+    "AUDUSD",
+    "USDCAD",
+    "USDCHF",
+    "NZDUSD"
+  ],
+  "max_setups_per_symbol": 2,
+  "max_daily_setups": 15,
+  "risk_per_trade": 0.01,
+  "min_bars_required": 200,
+  "scanner": {
+    "liquidity_lookback": 20,
+    "swing_lookback": 10,
+    "fvg_threshold": 0.0001,
+    "order_block_body_ratio": 0.6,
+    "structure_lookback": 50,
+    "timeframes": ["M5", "M15", "H1", "H4"],
+    "htf_confirmation": true
+  },
+  "ml_pipeline": {
+    "retrain_interval_days": 7,
+    "min_training_samples": 100,
+    "model_performance_threshold": 0.65,
+    "lookback_periods": [5, 10, 20],
+    "target_horizon": 5,
+    "profit_threshold": 0.002,
+    "model_params": {
+      "n_estimators": 100,
+      "max_depth": 10,
+      "min_samples_split": 10,
+      "min_samples_leaf": 5,
+      "random_state": 42
+    }
+  },
+  "feature_engineering": {
+    "ma_periods": [10, 20, 50],
+    "volatility_window": 20,
+    "rsi_period": 14
+  },
+  "ml_filter": {
+    "normal_threshold": 0.75,
+    "high_risk_threshold": 0.85,
+    "model_path": "ml_model.joblib",
+    "scaler_path": "ml_scaler.joblib"
+  }
+}
