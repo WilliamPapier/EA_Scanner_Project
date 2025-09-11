@@ -20,7 +20,11 @@ def run_scanner():
     if not os.path.exists(scheduler_path):
         print(f"Error: {scheduler_path} not found")
         return
-    subprocess.run([sys.executable, scheduler_path])
+    try:
+        subprocess.run([sys.executable, scheduler_path], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to start EA Scanner (exit code {e.returncode}).")
+        sys.exit(e.returncode)
 
 def main():
     if len(sys.argv) > 1:
