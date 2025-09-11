@@ -17,6 +17,9 @@ def run_scanner():
     print("Starting EA Scanner...")
     src_dir = os.path.join(os.path.dirname(__file__), "src")
     scheduler_path = os.path.join(src_dir, "scheduler.py")
+    if not os.path.exists(scheduler_path):
+        print(f"Error: {scheduler_path} not found")
+        return
     subprocess.run([sys.executable, scheduler_path])
 
 def main():
