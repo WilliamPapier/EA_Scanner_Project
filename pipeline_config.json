@@ -1,0 +1,31 @@
+{
+  "data_directory": "data",
+  "output_directory": "output",
+  "scanner": {
+    "ma_periods": [10, 20, 50],
+    "gap_threshold": 0.0005,
+    "scan_every_bar": false
+  },
+  "features": {
+    "ma_periods": [10, 20, 50],
+    "volatility_window": 20,
+    "rsi_period": 14
+  },
+  "ml_filter": {
+    "normal_threshold": 0.78,
+    "high_risk_threshold": 0.90,
+    "model_path": "ml_model.joblib",
+    "scaler_path": "ml_scaler.joblib"
+  },
+  "executor": {
+    "initial_balance": 10000,
+    "max_risk_per_trade": 0.02,
+    "base_risk_per_trade": 0.01,
+    "max_open_trades": 3,
+    "spread": 0.0002,
+    "log_file": "trade_log.csv"
+  },
+  "risk_level": "normal",
+  "save_results": true,
+  "create_sample_data": true
+}

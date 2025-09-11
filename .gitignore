@@ -1,14 +1,11 @@
-# Generated CSV files
-model_params.csv
-news_block.csv
-historical_setups.csv
-
 # Python cache
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 .Python
+
+# Build and distribution
 build/
 develop-eggs/
 dist/
@@ -43,3 +40,11 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Generated CSV/output files (but keep samples)
+model_params.csv
+news_block.csv
+historical_setups.csv
+
+# Test files
+test_project.py
