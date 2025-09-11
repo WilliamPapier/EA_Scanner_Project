@@ -8,13 +8,13 @@ This project implements a comprehensive, machine learning-driven trading pipelin
 
 ### Features
 
-- **Universal Scanner**: Detects MA crossovers, gaps, and optionally every bar as candidate setups
-- **Modular Feature Engineering**: Extracts volatility, candle patterns, gap analysis, MA context, and higher timeframe features
-- **ML Confidence Filter**: Only executes trades when ML confidence exceeds configurable thresholds (0.78 for normal risk, 0.90+ for high risk)
-- **Dynamic Risk Management**: Adjusts position sizing and stop-loss/take-profit based on ML confidence and market volatility
-- **Comprehensive Logging**: Detailed trade logs and performance analytics
-- **CSV Data Support**: Robust handling of various CSV formats and quirks
-- **Extensible Architecture**: Easy to add new features and trading strategies
+- **Universal Scanner**: Detects MA crossovers, gaps, and optionally every bar as candidate setups.
+- **Modular Feature Engineering**: Extracts volatility, candle patterns, gap analysis, MA context, and higher timeframe features.
+- **ML Confidence Filter**: Only executes trades when ML confidence exceeds configurable thresholds (0.78 for normal risk, 0.90+ for high risk).
+- **Dynamic Risk Management**: Adjusts position sizing and stop-loss/take-profit based on ML confidence and market volatility.
+- **Comprehensive Logging**: Detailed trade logs and performance analytics.
+- **CSV Data Support**: Robust handling of various CSV formats and quirks.
+- **Extensible Architecture**: Easy to add new features and trading strategies.
 
 ### Project Structure
 
@@ -33,35 +33,43 @@ EA_Scanner_Project/
 ├── data/                   # CSV data files
 ├── output/                 # Generated reports and models
 ├── run_executor_with_features.py  # Main pipeline script
-├── pipeline_config.json   # Default configuration
+├── pipeline_config.json    # Default configuration
 └── README.md
 ```
 
-### Quick Start
+### Dependencies
 
-1. **Install Dependencies**:
-   ```bash
-   pip install pandas numpy scikit-learn
-   ```
+Install required packages:
+```bash
+pip install pandas numpy scikit-learn
+```
+(For MetaTrader5 integration, also install `MetaTrader5` and `schedule` as needed.)
 
-2. **Run with Sample Data**:
+### Usage
+
+1. Ensure MetaTrader 5 is installed and running (if using EA integration).
+2. Run with sample data:
    ```bash
    python3 run_executor_with_features.py
    ```
-
-3. **Run with Custom Configuration**:
+3. Run with custom configuration:
    ```bash
    python3 run_executor_with_features.py --config pipeline_config.json
    ```
-
-4. **Enable Every-Bar Scanning**:
+4. Enable every-bar scanning:
    ```bash
    python3 run_executor_with_features.py --scan-every-bar
    ```
-
-5. **Use High-Risk Mode**:
+5. Use high-risk mode:
    ```bash
    python3 run_executor_with_features.py --risk-level high
+   ```
+6. Or, run individual components (if using classic scripts):
+   ```bash
+   python scanner.py
+   python infer_and_write_params.py
+   python news_updater.py
+   python scheduler.py
    ```
 
 ### Configuration
@@ -103,11 +111,12 @@ The system automatically handles:
 
 ### Output Files
 
-The pipeline generates:
 - `trade_log.csv`: Detailed trade execution log
 - `output/performance_report.json`: Trading performance metrics
 - `output/processed_setups.json`: All detected setups and their analysis
 - `output/pipeline_summary.json`: Complete pipeline execution summary
+- `model_params.csv`: Trading setups for the EA to read
+- `news_block.csv`: News-based trading restrictions
 
 ### Extensibility
 
@@ -139,8 +148,8 @@ Options:
   -d, --data-dir DATA_DIR     Data directory path
   -o, --output-dir OUTPUT_DIR Output directory path
   -r, --risk-level LEVEL      Risk level (normal/high)
-  --scan-every-bar           Enable every-bar scanning
-  -v, --verbose              Enable verbose logging
+  --scan-every-bar            Enable every-bar scanning
+  -v, --verbose               Enable verbose logging
 ```
 
 ### Performance Monitoring
