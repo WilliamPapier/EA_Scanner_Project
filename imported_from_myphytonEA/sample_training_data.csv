@@ -1,0 +1,5 @@
+confidence,volatility,orderflow,session,pattern,news,label
+0.85,1.2,0.5,London,Breakout,0,1
+0.65,1.8,-0.2,New York,Order Block,1,0
+0.90,1.1,0.3,London,Reversal,0,1
+0.55,2.0,-0.5,Asia,Breakout,1,0

@@ -1,0 +1,14 @@
+PropFirmTools/
+├── EA/
+│   └── PropFirmToolsEA.mq5
+├── Dashboard/
+│   ├── server.py
+│   ├── gui.py
+│   └── assets/
+│       └── (optional images/icons for GUI)
+├── Scanner/
+│   └── historical_scanner.py
+├── data/
+│   └── (optional CSV historical files)
+├── requirements.txt
+└── README.pdf

@@ -1,0 +1,13 @@
+flask
+requests
+tk
+numpy
+pandas
+scikit-learn
+joblib
+shap
+lime
+dash
+dash-bootstrap-components
+matplotlib
+tensorflow; sys_platform != 'win32'  # Optional, only if using LSTM/CNN
