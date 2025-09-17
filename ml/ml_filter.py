@@ -12,6 +12,7 @@ from sklearn.metrics import classification_report, accuracy_score
 import joblib
 import os
 import logging
+import requests
 from typing import Dict, List, Optional, Tuple, Any
 import warnings
 warnings.filterwarnings('ignore')
@@ -32,10 +33,116 @@ class MLFilter:
         self.model_path = self.config.get('model_path', 'ml_model.joblib')
         self.scaler_path = self.config.get('scaler_path', 'ml_scaler.joblib')
         
+        # FastAPI server configuration
+        self.server_url = self.config.get('server_url', 'http://127.0.0.1:8001/signal')
+        self.server_timeout = self.config.get('server_timeout', 5.0)  # seconds
+        self.use_server = self.config.get('use_server', True)
+        
         self.model = None
         self.scaler = None
         self.feature_names = None
         self.is_trained = False
+        self.server_available = False
+        
+        # Check server availability on initialization
+        if self.use_server:
+            self.check_server_health()
+    
+    def check_server_health(self) -> bool:
+        """Check if the FastAPI ML server is available"""
+        try:
+            # Simple health check - try to reach server with minimal data
+            test_payload = {
+                'entry': 1.0,
+                'direction': 'long',
+                'tp': 1.01,
+                'sl': 0.99
+            }
+            
+            response = requests.post(
+                self.server_url,
+                json=test_payload,
+                timeout=self.server_timeout
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                # Validate response format
+                required_keys = ['action', 'sl', 'tp', 'model_used']
+                if all(key in data for key in required_keys):
+                    self.server_available = True
+                    logger.info(f"FastAPI ML server is available at {self.server_url}")
+                    return True
+                else:
+                    logger.warning(f"Server responded but with invalid format: {data}")
+            else:
+                logger.warning(f"Server health check failed with status: {response.status_code}")
+                
+        except requests.exceptions.RequestException as e:
+            logger.info(f"FastAPI ML server not available: {e}")
+        except Exception as e:
+            logger.error(f"Error checking server health: {e}")
+        
+        self.server_available = False
+        return False
+    
+    def query_server(self, setup: Dict, features: Dict) -> Optional[Dict]:
+        """Query the FastAPI ML server for trading signal"""
+        if not self.server_available:
+            return None
+            
+        try:
+            # Prepare payload for server
+            # Extract key information from setup and features
+            entry_price = setup.get('entry', features.get('close', 1.0))
+            direction = setup.get('direction', 'long')
+            
+            # Calculate basic TP/SL based on features if available
+            atr = features.get('atr', 0.001)
+            tp_distance = atr * 2  # 2x ATR for take profit
+            sl_distance = atr * 1  # 1x ATR for stop loss
+            
+            if direction == 'long':
+                tp = entry_price + tp_distance
+                sl = entry_price - sl_distance
+            else:
+                tp = entry_price - tp_distance  
+                sl = entry_price + sl_distance
+                
+            payload = {
+                'entry': entry_price,
+                'direction': direction,
+                'tp': tp,
+                'sl': sl,
+                # Include additional context if helpful
+                'symbol': setup.get('symbol', 'UNKNOWN'),
+                'setup_type': setup.get('setup_type', 'unknown')
+            }
+            
+            response = requests.post(
+                self.server_url,
+                json=payload,
+                timeout=self.server_timeout
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                logger.debug(f"Server response: {result}")
+                return result
+            else:
+                logger.warning(f"Server request failed with status {response.status_code}: {response.text}")
+                # Mark server as unavailable and fallback to dummy
+                self.server_available = False
+                
+        except requests.exceptions.RequestException as e:
+            logger.warning(f"Failed to query ML server: {e}")
+            # Mark server as unavailable for this session
+            self.server_available = False
+        except Exception as e:
+            logger.error(f"Error querying server: {e}")
+            
+        return None
+        self.server_available = False
         
     def prepare_features(self, features_dict: Dict) -> np.ndarray:
         """Convert feature dictionary to numpy array for ML model"""
@@ -244,18 +351,46 @@ class MLFilter:
             # Fallback to base confidence from setup
             return features.get('base_confidence', 0.5)
     
-    def should_execute_trade(self, features: Dict, risk_level: str = 'normal') -> Tuple[bool, float]:
+    def should_execute_trade(self, features: Dict, risk_level: str = 'normal', setup: Optional[Dict] = None) -> Tuple[bool, float]:
         """
         Determine if trade should be executed based on ML confidence
         
         Args:
             features: Feature dictionary for the setup
             risk_level: 'normal' or 'high' risk level
+            setup: Setup dictionary with trade information (optional, for server query)
             
         Returns:
             (should_execute, confidence_score)
         """
-        confidence = self.predict_confidence(features)
+        confidence = None
+        
+        # Try server first if available and setup provided
+        if self.use_server and self.server_available and setup is not None:
+            logger.debug("Querying FastAPI ML server for trading decision")
+            server_response = self.query_server(setup, features)
+            
+            if server_response and 'model_used' in server_response:
+                # Server responded successfully
+                action = server_response.get('action', 'hold').lower()
+                
+                # Convert server action to confidence score
+                # Server actions: 'buy', 'sell', 'hold'
+                if action == 'buy':
+                    confidence = 0.85  # High confidence for buy signal
+                elif action == 'sell': 
+                    confidence = 0.85  # High confidence for sell signal
+                else:  # hold
+                    confidence = 0.3   # Low confidence for hold/neutral
+                    
+                logger.info(f"Server ML decision: action={action}, confidence={confidence:.3f}")
+            else:
+                logger.warning("Server query failed, falling back to local model")
+        
+        # Fallback to local prediction if server not available or failed
+        if confidence is None:
+            logger.debug("Using local/dummy ML model for prediction")  
+            confidence = self.predict_confidence(features)
         
         # Determine threshold based on risk level
         if risk_level == 'high':
@@ -265,7 +400,8 @@ class MLFilter:
         
         should_execute = confidence >= threshold
         
-        logger.info(f"ML Filter - Confidence: {confidence:.3f}, Threshold: {threshold:.3f}, Execute: {should_execute}")
+        source = "Server" if confidence is not None and self.server_available else "Local"
+        logger.info(f"ML Filter ({source}) - Confidence: {confidence:.3f}, Threshold: {threshold:.3f}, Execute: {should_execute}")
         
         return should_execute, confidence
     
@@ -345,13 +481,13 @@ class MLFilter:
             logger.error(f"Error getting feature importance: {e}")
             return {}
     
-    def analyze_setup(self, features: Dict) -> Dict:
+    def analyze_setup(self, features: Dict, setup: Optional[Dict] = None) -> Dict:
         """Comprehensive analysis of a setup"""
         confidence = self.predict_confidence(features)
         
         # Get recommendations for different risk levels
-        normal_execute, _ = self.should_execute_trade(features, 'normal')
-        high_risk_execute, _ = self.should_execute_trade(features, 'high')
+        normal_execute, _ = self.should_execute_trade(features, 'normal', setup)
+        high_risk_execute, _ = self.should_execute_trade(features, 'high', setup)
         
         # Get feature importance
         feature_importance = self.get_feature_importance()

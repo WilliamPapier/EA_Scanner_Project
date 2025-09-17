@@ -172,6 +172,18 @@ class TradingPipeline:
     
     def initialize_ml_model(self):
         """Initialize or load ML model"""
+        # If server is available and configured, we don't need to load/create local model
+        # unless it's for fallback purposes
+        if self.ml_filter.use_server and self.ml_filter.server_available:
+            logger.info("Using FastAPI ML server for trading decisions")
+            # Still create dummy model as fallback in case server becomes unavailable
+            logger.info("Creating dummy ML model as fallback for server downtime")
+            self.ml_filter.create_dummy_model()
+            return
+        
+        # Server not available, proceed with local model loading/creation
+        logger.info("FastAPI server not available, using local ML model")
+        
         model_path = os.path.join(self.config['output_directory'], 
                                  self.config['ml_filter']['model_path'])
         
@@ -179,7 +191,7 @@ class TradingPipeline:
         if os.path.exists(model_path):
             success = self.ml_filter.load_model(self.config['output_directory'])
             if success:
-                logger.info("ML model loaded successfully")
+                logger.info("Local ML model loaded successfully")
                 return
         
         # Create dummy model for demonstration
@@ -225,7 +237,7 @@ class TradingPipeline:
                 
                 # Step 3: ML filtering
                 risk_level = self.config.get('risk_level', 'normal')
-                should_execute, ml_confidence = self.ml_filter.should_execute_trade(features, risk_level)
+                should_execute, ml_confidence = self.ml_filter.should_execute_trade(features, risk_level, setup)
                 
                 setup['ml_confidence'] = ml_confidence
                 setup['features'] = features

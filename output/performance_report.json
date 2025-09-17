@@ -1,13 +1,13 @@
 {
-  "total_trades": 0,
-  "winning_trades": 0,
-  "losing_trades": 0,
-  "win_rate": 0.0,
-  "total_profit": 0.0,
-  "average_profit": 0.0,
-  "max_profit": 0.0,
-  "max_loss": 0.0,
-  "profit_factor": 0.0,
-  "current_balance": 10000,
-  "total_return": 0.0
+  "total_trades": 3,
+  "winning_trades": 2,
+  "losing_trades": 1,
+  "win_rate": 66.66666666666666,
+  "total_profit": -5750.84879915147,
+  "average_profit": -1916.9495997171568,
+  "max_profit": 139.7456999992528,
+  "max_loss": -5993.215499150495,
+  "profit_factor": 0.04044017773653871,
+  "current_balance": 4249.151200848531,
+  "total_return": -57.50848799151469
 }
