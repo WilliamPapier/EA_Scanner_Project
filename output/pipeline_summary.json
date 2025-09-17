@@ -3,22 +3,22 @@
     "files_processed": 3,
     "setups_found": 30,
     "setups_with_features": 30,
-    "setups_passed_ml_filter": 26,
-    "trades_executed": 5,
-    "trades_closed": 5
+    "setups_passed_ml_filter": 0,
+    "trades_executed": 0,
+    "trades_closed": 0
   },
   "performance": {
-    "total_trades": 5,
-    "winning_trades": 2,
-    "losing_trades": 3,
-    "win_rate": 40.0,
-    "total_profit": -6860.402244045943,
-    "average_profit": -1372.0804488091885,
-    "max_profit": 37.56719500000827,
-    "max_loss": -3551.8515355927607,
-    "profit_factor": 0.009788052778564262,
-    "current_balance": 3139.5977559540574,
-    "total_return": -68.60402244045943
+    "total_trades": 0,
+    "winning_trades": 0,
+    "losing_trades": 0,
+    "win_rate": 0.0,
+    "total_profit": 0.0,
+    "average_profit": 0.0,
+    "max_profit": 0.0,
+    "max_loss": 0.0,
+    "profit_factor": 0.0,
+    "current_balance": 10000,
+    "total_return": 0.0
   },
   "configuration": {
     "data_directory": "data",
@@ -42,8 +42,8 @@
       "rsi_period": 14
     },
     "ml_filter": {
-      "normal_threshold": 0.2,
-      "high_risk_threshold": 0.8,
+      "normal_threshold": 0.78,
+      "high_risk_threshold": 0.9,
       "model_path": "ml_model.joblib",
       "scaler_path": "ml_scaler.joblib"
     },
@@ -51,13 +51,13 @@
       "initial_balance": 10000,
       "max_risk_per_trade": 0.02,
       "base_risk_per_trade": 0.01,
-      "max_open_trades": 5,
+      "max_open_trades": 3,
       "spread": 0.0002,
       "log_file": "trade_log.csv"
     },
     "risk_level": "normal",
     "save_results": true,
-    "create_sample_data": false
+    "create_sample_data": true
   },
-  "run_timestamp": "2025-09-11T14:14:55.283655"
+  "run_timestamp": "2025-09-17T03:09:33.456764"
 }

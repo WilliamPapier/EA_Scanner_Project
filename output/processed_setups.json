@@ -10,7 +10,7 @@
     "confidence": 0.6,
     "symbol": "USDJPY",
     "ml_confidence": 0.3126222943722944,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -23,7 +23,7 @@
     "confidence": 0.6,
     "symbol": "USDJPY",
     "ml_confidence": 0.23510714285714285,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -36,7 +36,7 @@
     "confidence": 0.6,
     "symbol": "USDJPY",
     "ml_confidence": 0.28743181818181823,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -49,7 +49,7 @@
     "confidence": 0.6,
     "symbol": "USDJPY",
     "ml_confidence": 0.22,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -62,7 +62,7 @@
     "confidence": 0.6,
     "symbol": "USDJPY",
     "ml_confidence": 0.2461666666666667,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -75,7 +75,7 @@
     "confidence": 0.6,
     "symbol": "USDJPY",
     "ml_confidence": 0.2476818181818182,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -88,7 +88,7 @@
     "confidence": 0.6,
     "symbol": "USDJPY",
     "ml_confidence": 0.31422943722943725,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -101,7 +101,7 @@
     "confidence": 0.6,
     "symbol": "USDJPY",
     "ml_confidence": 0.29671428571428576,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -114,7 +114,7 @@
     "confidence": 0.6,
     "symbol": "USDJPY",
     "ml_confidence": 0.3342142857142858,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -127,7 +127,7 @@
     "confidence": 0.6,
     "symbol": "USDJPY",
     "ml_confidence": 0.31422943722943725,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -140,7 +140,7 @@
     "confidence": 0.6,
     "symbol": "USDJPY",
     "ml_confidence": 0.3348127705627706,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -153,7 +153,7 @@
     "confidence": 0.6,
     "symbol": "USDJPY",
     "ml_confidence": 0.34925721500721507,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -166,7 +166,7 @@
     "confidence": 0.6,
     "symbol": "USDJPY",
     "ml_confidence": 0.31422943722943725,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -192,7 +192,7 @@
     "confidence": 0.6,
     "symbol": "USDJPY",
     "ml_confidence": 0.29809848484848483,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -205,7 +205,7 @@
     "confidence": 0.6,
     "symbol": "USDJPY",
     "ml_confidence": 0.30822943722943724,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -218,7 +218,7 @@
     "confidence": 0.6,
     "symbol": "USDJPY",
     "ml_confidence": 0.34314610389610395,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -231,7 +231,7 @@
     "confidence": 0.6,
     "symbol": "USDJPY",
     "ml_confidence": 0.31422943722943725,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -244,7 +244,7 @@
     "confidence": 0.6,
     "symbol": "GBPUSD",
     "ml_confidence": 0.29162229437229437,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -270,7 +270,7 @@
     "confidence": 0.6,
     "symbol": "GBPUSD",
     "ml_confidence": 0.28743181818181823,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -309,7 +309,7 @@
     "confidence": 0.6,
     "symbol": "GBPUSD",
     "ml_confidence": 0.22077380952380954,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -322,7 +322,7 @@
     "confidence": 0.6,
     "symbol": "GBPUSD",
     "ml_confidence": 0.34814610389610395,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -335,7 +335,7 @@
     "confidence": 0.6,
     "symbol": "GBPUSD",
     "ml_confidence": 0.23183333333333334,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -348,7 +348,7 @@
     "confidence": 0.6,
     "symbol": "GBPUSD",
     "ml_confidence": 0.23183333333333334,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -361,7 +361,7 @@
     "confidence": 0.6,
     "symbol": "GBPUSD",
     "ml_confidence": 0.3024318181818182,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -374,7 +374,7 @@
     "confidence": 0.6,
     "symbol": "GBPUSD",
     "ml_confidence": 0.23902380952380953,
-    "ml_approved": "True"
+    "ml_approved": "False"
   },
   {
     "setup_type": "ma_cross",
@@ -387,6 +387,6 @@
     "confidence": 0.6,
     "symbol": "GBPUSD",
     "ml_confidence": 0.24819047619047618,
-    "ml_approved": "True"
+    "ml_approved": "False"
   }
 ]
