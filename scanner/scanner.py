@@ -339,6 +339,29 @@ class UniversalScanner:
                 'liquidity_sweep_high': 0, 'liquidity_sweep_low': 0,
                 'fvg_bullish': 0, 'fvg_bearish': 0, 'fvg_size': 0.0
             })
+            
+        # =================
+        # MULTI-TIMEFRAME STRUCTURE FEATURES (NEW!)
+        # =================
+        try:
+            symbol = df.get('symbol', ['UNKNOWN'])[0] if 'symbol' in df.columns else "UNKNOWN"
+            mtf_features = self._extract_mtf_structure_features(df, row_index, symbol)
+            features.update(mtf_features)
+        except Exception as e:
+            logger.warning(f"Error calculating multi-timeframe structure features: {e}")
+            # Add default MTF features
+            mtf_timeframes = ['15m', '30m', '1h', '4h']
+            for tf in mtf_timeframes:
+                features.update({
+                    f'{tf}_liquidity_sweep_high': 0,
+                    f'{tf}_liquidity_sweep_low': 0,
+                    f'{tf}_recent_high': current_row['high'],
+                    f'{tf}_recent_low': current_row['low'],
+                    f'{tf}_swing_high': 0,
+                    f'{tf}_swing_low': 0,
+                    f'{tf}_bos_bullish': 0,
+                    f'{tf}_bos_bearish': 0
+                })
         
         # =================
         # TIME FEATURES
@@ -416,6 +439,116 @@ class UniversalScanner:
                 'price_percentile': 0.5, 'momentum_5': 0.0, 'momentum_10': 0.0
             })
         
+        return features
+    
+    def _extract_mtf_structure_features(self, df: pd.DataFrame, row_index: int, symbol: str = "UNKNOWN") -> Dict:
+        """Extract multi-timeframe structure features by resampling current data"""
+        features = {}
+        
+        try:
+            if len(df) < 100:  # Need sufficient data for resampling
+                return {}
+                
+            # Only process if we have timestamp column
+            if 'timestamp' not in df.columns:
+                df_with_time = df.copy()
+                df_with_time['timestamp'] = pd.date_range(start='2024-01-01', periods=len(df), freq='5min')
+            else:
+                df_with_time = df.copy()
+                
+            # Ensure timestamp is datetime
+            if not pd.api.types.is_datetime64_any_dtype(df_with_time['timestamp']):
+                df_with_time['timestamp'] = pd.to_datetime(df_with_time['timestamp'])
+            
+            # Get data up to current row
+            current_data = df_with_time.iloc[:row_index+1].copy()
+            
+            # Resample to different timeframes (simulating multi-timeframe analysis)
+            timeframes = {
+                '15m': '15min',
+                '30m': '30min', 
+                '1h': '1h',  # Changed from '1H' to '1h'
+                '4h': '4h'   # Changed from '4H' to '4h'
+            }
+            
+            for tf_name, resample_rule in timeframes.items():
+                try:
+                    # Set timestamp as index for resampling
+                    resampled_df = current_data.set_index('timestamp').resample(resample_rule).agg({
+                        'open': 'first',
+                        'high': 'max',
+                        'low': 'min', 
+                        'close': 'last',
+                        'volume': 'sum'
+                    }).dropna()
+                    
+                    if len(resampled_df) < 10:
+                        continue
+                        
+                    # Extract liquidity features for this timeframe
+                    recent_high = resampled_df['high'].rolling(10).max().iloc[-2] if len(resampled_df) >= 11 else resampled_df['high'].max()
+                    recent_low = resampled_df['low'].rolling(10).min().iloc[-2] if len(resampled_df) >= 11 else resampled_df['low'].min()
+                    current_high = resampled_df['high'].iloc[-1]
+                    current_low = resampled_df['low'].iloc[-1]
+                    
+                    # Liquidity sweep detection
+                    sweep_threshold = 1.0001 if tf_name in ['15m', '30m'] else 1.0002
+                    features[f'{tf_name}_liquidity_sweep_high'] = 1 if current_high > recent_high * sweep_threshold else 0
+                    features[f'{tf_name}_liquidity_sweep_low'] = 1 if current_low < recent_low * (2 - sweep_threshold) else 0
+                    
+                    # Structure levels
+                    features[f'{tf_name}_recent_high'] = recent_high
+                    features[f'{tf_name}_recent_low'] = recent_low
+                    
+                    # Swing high/low detection for this timeframe
+                    swing_window = 3 if tf_name in ['15m', '30m'] else 5
+                    if len(resampled_df) >= swing_window * 2 + 1:
+                        last_idx = len(resampled_df) - 1
+                        
+                        # Check if current bar is swing high
+                        if last_idx >= swing_window and last_idx < len(resampled_df) - swing_window:
+                            is_swing_high = all(current_high >= resampled_df['high'].iloc[j] 
+                                              for j in range(last_idx-swing_window, last_idx+swing_window+1) 
+                                              if j != last_idx)
+                            features[f'{tf_name}_swing_high'] = 1 if is_swing_high else 0
+                            
+                            # Check if current bar is swing low
+                            is_swing_low = all(current_low <= resampled_df['low'].iloc[j]
+                                             for j in range(last_idx-swing_window, last_idx+swing_window+1)
+                                             if j != last_idx)
+                            features[f'{tf_name}_swing_low'] = 1 if is_swing_low else 0
+                        else:
+                            features[f'{tf_name}_swing_high'] = 0
+                            features[f'{tf_name}_swing_low'] = 0
+                    
+                    # BOS detection for this timeframe
+                    if len(resampled_df) >= 20:
+                        recent_data = resampled_df.iloc[-20:]
+                        prev_high = recent_data['high'].iloc[:-5].max() if len(recent_data) > 5 else recent_data['high'].max()
+                        prev_low = recent_data['low'].iloc[:-5].min() if len(recent_data) > 5 else recent_data['low'].min()
+                        current_close = resampled_df['close'].iloc[-1]
+                        
+                        features[f'{tf_name}_bos_bullish'] = 1 if current_close > prev_high else 0
+                        features[f'{tf_name}_bos_bearish'] = 1 if current_close < prev_low else 0
+                    else:
+                        features[f'{tf_name}_bos_bullish'] = 0
+                        features[f'{tf_name}_bos_bearish'] = 0
+                        
+                except Exception as e:
+                    logger.warning(f"Error processing {tf_name} timeframe features: {e}")
+                    # Set default values
+                    features[f'{tf_name}_liquidity_sweep_high'] = 0
+                    features[f'{tf_name}_liquidity_sweep_low'] = 0
+                    features[f'{tf_name}_recent_high'] = df.iloc[row_index]['high']
+                    features[f'{tf_name}_recent_low'] = df.iloc[row_index]['low']
+                    features[f'{tf_name}_swing_high'] = 0
+                    features[f'{tf_name}_swing_low'] = 0
+                    features[f'{tf_name}_bos_bullish'] = 0
+                    features[f'{tf_name}_bos_bearish'] = 0
+                    
+        except Exception as e:
+            logger.warning(f"Error in MTF structure feature extraction: {e}")
+            
         return features
     
     def _extract_structure_features(self, df: pd.DataFrame, row_index: int) -> Dict:
