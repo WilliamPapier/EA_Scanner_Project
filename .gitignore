@@ -46,5 +46,10 @@ model_params.csv
 news_block.csv
 historical_setups.csv
 
+# Large test data files
+Historical_Data/*.csv
+Scan_Results/*.csv  
+Test_Results/*.csv
+
 # Test files
 test_project.py
